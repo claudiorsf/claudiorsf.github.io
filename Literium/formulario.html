@@ -1,55 +1,49 @@
-<!doctype html>
-<html lang="es">
-    <!--
-        Formulario de contacto con PHP
-        https://parzibyte.me/blog
-    -->
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1,
-            shrink-to-fit=no">
-        <meta name="description" content="Contacto">
-        <meta name="author" content="Parzibyte">
-        <title>Formulario de contacto</title>
-        <!-- Cargar el CSS de Boostrap-->
-        <link href="css/bootstrap.min.css" rel="stylesheet">
-    </head>
+<!DOCTYPE html>
+<head>
+    <title>Formulario de contacto</title>
+</head>
+<body>
+<?php 
+if(isset($_POST['submit'])){
+    if(isset($_POST['disclaimer'])) {
+        $to = "literiumconsultora@gmail.com"; // Tu email
+        $from = $_POST['email'];
+        $name = $_POST['name'];
+        $subject = "Mensaje enviado";
+        $subject2 = "Copia del mensaje";
+        $message = $name . " escribió lo siguiente:" . "\n\n" . $_POST['message'];
+        $message2 = "Esto es una copia del mensaje " . $name . "\n\n" . $_POST['message'];
 
-    <body>
-        <!-- Termina la definición del menú -->
-        <main role="main" class="container">
-            <div class="row">
-                <!-- Aquí pon las col-x necesarias, comienza tu contenido, etcétera -->
-                <div class="col-12">
-                    <h1>Gracias por contactarme</h1>
-                    <a href="//parzibyte.me/blog" target="_blank">By Parzibyte</a>
-                </div>
-                <div class="col-12">
-                    <form method="POST" action="contacto.php">
-                        <div class="form-group">
-                            <label for="nombre">Nombre</label>
-                            <input name="nombre" required type="text" id="nombre"
-                                class="form-control" placeholder="Tu nombre">
-                        </div>
-                        <div class="form-group">
-                            <label for="correo">Correo electrónico</label>
-                            <input name="correo" required type="email" id="correo"
-                                class="form-control" placeholder="Tu correo electrónico">
-                        </div>
-                        <div class="form-group">
-                            <label for="mensaje">Mensaje</label>
-                            <textarea required placeholder="Escribe tu mensaje"
-                                class="form-control" name="mensaje" id="mensaje"
-                                cols="30" rows="5"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <button class="btn-success btn" type="submit">
-                                Enviar
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </main>
-    </body>
+        $headers = "From:" . $from;
+        $headers2 = "From:" . $to;
+        mail($to,$subject,$message,$headers);
+        mail($from,$subject2,$message2,$headers2); // Envia una copia a la persona. Si no lo quieres, borra esta línea.
+        echo "Mensaje enviado. Gracias " . $name . ", me pondré en contacto lo antes posible.";
+    } else {
+        echo 'Debe acertar las condiciones de uso y privacidad';
+    }
+}
+?>
+    <form action="#formulario-contacto" method="post" id="formulario-contacto">
+        <p>
+            <label for="name">Nombre</label>
+            <input type="text" name="name" id="name">
+        </p>
+        <p>
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email">
+        </p>
+        <p>
+            <label for="message">Mensaje</label>
+            <textarea name="message" id="message"></textarea>
+        </p> 
+        <p>
+            <label for="disclaimer">Acepto las <a href="#">condiciones de uso y privacidad</a></label>
+            <input type="checkbox" name="disclaimer" id="disclaimer">
+        </p>
+        <p>
+            <input type="submit" name="submit" value="Enviar">
+        </p>
+    </form>
+</body>
 </html> 
